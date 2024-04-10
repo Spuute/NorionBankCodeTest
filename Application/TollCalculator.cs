@@ -14,14 +14,14 @@ public class TollCalculator
      * @return - the total toll fee for that day
      */
 
-    public int GetTollFee(Vehicle vehicle, DateTime[] dates)
+    public int GetTollFee(VehicleBase vehicleBase, DateTime[] dates)
     {
         var intervalStart = dates[0];
         var totalFee = 0;
         foreach (var date in dates)
         {
-            var nextFee = GetTollFee(date, vehicle);
-            var tempFee = GetTollFee(intervalStart, vehicle);
+            var nextFee = GetTollFee(date, vehicleBase);
+            var tempFee = GetTollFee(intervalStart, vehicleBase);
 
             long diffInMillies = date.Millisecond - intervalStart.Millisecond;
             var minutes = diffInMillies/1000/60;
@@ -41,10 +41,10 @@ public class TollCalculator
         return totalFee;
     }
 
-    private bool IsTollFreeVehicle(Vehicle vehicle)
+    private bool IsTollFreeVehicle(VehicleBase vehicleBase)
     {
-        if (vehicle == null) return false;
-        var vehicleType = vehicle.GetVehicleType();
+        if (vehicleBase == null) return false;
+        var vehicleType = vehicleBase.GetVehicleType();
         return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
                vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
                vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
@@ -53,9 +53,9 @@ public class TollCalculator
                vehicleType.Equals(TollFreeVehicles.Military.ToString());
     }
 
-    public int GetTollFee(DateTime date, Vehicle vehicle)
+    public int GetTollFee(DateTime date, VehicleBase vehicleBase)
     {
-        if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle)) return 0;
+        if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicleBase)) return 0;
 
         var hour = date.Hour;
         var minute = date.Minute;
