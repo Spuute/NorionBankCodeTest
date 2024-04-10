@@ -1,9 +1,11 @@
+using Core.Enums;
+
 namespace Core.Entities;
 
-public class Car : Vehicle
+public class Car : VehicleBase
 {
-    public string GetVehicleType()
+    public override VehicleType GetVehicleType()
     {
-        return "Car";
+        return VehicleType.Car;
     }
 }
