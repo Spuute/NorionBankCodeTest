@@ -7,14 +7,7 @@ public class TollFreeChecker
 {
     public bool IsTollFreeVehicle(VehicleBase vehicleBase)
     {
-        if (vehicleBase == null) return false;
-        var vehicleType = vehicleBase.GetVehicleType();
-        return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Diplomat.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Foreign.ToString()) ||
-               vehicleType.Equals(TollFreeVehicles.Military.ToString());
+        return Enum.TryParse<TollFreeVehicles>(vehicleBase.GetVehicleType().ToString(), out _);
     }
     
     public bool IsTollFreeDate(DateTime date)
