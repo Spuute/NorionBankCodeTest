@@ -43,22 +43,76 @@ public class TollFeeCalculationService
         return totalFee;
     }
 
-    public int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicleBase)
+    private int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicleBase)
     {
         if (_tollFreeChecker.IsTollFreeDate(date) || _tollFreeChecker.IsTollFreeVehicle(vehicleBase)) return 0;
-
-        var hour = date.Hour;
-        var minute = date.Minute;
-
-        if (hour == 6 && minute >= 0 && minute <= 29) return 8;
-        else if (hour == 6 && minute >= 30 && minute <= 59) return 13;
-        else if (hour == 7 && minute >= 0 && minute <= 59) return 18;
-        else if (hour == 8 && minute >= 0 && minute <= 29) return 13;
-        else if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return 8;
-        else if (hour == 15 && minute >= 0 && minute <= 29) return 13;
-        else if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return 18;
-        else if (hour == 17 && minute >= 0 && minute <= 59) return 13;
-        else if (hour == 18 && minute >= 0 && minute <= 29) return 8;
-        else return 0;
+        
+        return _tollFeeTable.OrderByDescending(x => x.Price).FirstOrDefault(x => x.TimeIsWithinBounds(date.TimeOfDay))?.Price ?? 0;
     }
+    
+    private readonly List<TollFeeMap> _tollFeeTable =
+    [
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(6, 0, 0),
+            TimeTo = new TimeSpan(6, 29, 59),
+            Price = 8
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(6, 30, 0),
+            TimeTo = new TimeSpan(6, 59, 59),
+            Price = 13
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(7, 0, 0),
+            TimeTo = new TimeSpan(7, 59, 59),
+            Price = 18
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(8, 0, 0),
+            TimeTo = new TimeSpan(8, 29, 59),
+            Price = 13
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(8, 30, 0),
+            TimeTo = new TimeSpan(14, 59, 59),
+            Price = 8
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(15, 0, 0),
+            TimeTo = new TimeSpan(15, 29, 59),
+            Price = 13
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(15, 30, 0),
+            TimeTo = new TimeSpan(16, 59, 59),
+            Price = 18
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(17, 0, 0),
+            TimeTo = new TimeSpan(17, 59, 59),
+            Price = 13
+        },
+
+        new TollFeeMap
+        {
+            TimeFrom = new TimeSpan(18, 0, 0),
+            TimeTo = new TimeSpan(18, 29, 59),
+            Price = 8
+        }
+    ];
 }
