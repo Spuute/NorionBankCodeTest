@@ -1,6 +1,7 @@
 using Application.Helpers;
 using Core.DomainObjects;
 using Core.Entities;
+using Core.Enums;
 
 namespace Application.Services.TollFeeCalculationService;
 
@@ -45,9 +46,14 @@ public class TollFeeCalculationService
 
     private int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicleBase)
     {
-        if (_tollFreeChecker.IsTollFreeDate(date) || _tollFreeChecker.IsTollFreeVehicle(vehicleBase)) return 0;
+        if (_tollFreeChecker.IsTollFreeDate(date) || IsTollFreeVehicle(vehicleBase)) return 0;
         
         return _tollFeeTable.OrderByDescending(x => x.Price).FirstOrDefault(x => x.TimeIsWithinBounds(date.TimeOfDay))?.Price ?? 0;
+    }
+    
+    private static bool IsTollFreeVehicle(VehicleBase vehicleBase)
+    {
+        return Enum.TryParse<TollFreeVehicles>(vehicleBase.GetVehicleType().ToString(), out _);
     }
     
     private readonly List<TollFeeMap> _tollFeeTable =

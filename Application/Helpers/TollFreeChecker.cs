@@ -5,10 +5,7 @@ namespace Application.Helpers;
 
 public class TollFreeChecker
 {
-    public bool IsTollFreeVehicle(VehicleBase vehicleBase)
-    {
-        return Enum.TryParse<TollFreeVehicles>(vehicleBase.GetVehicleType().ToString(), out _);
-    }
+
     
     public bool IsTollFreeDate(DateTime date)
     {
