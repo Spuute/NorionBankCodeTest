@@ -7,23 +7,21 @@ namespace Application.Services.TollFeeCalculationService;
 
 public class TollFeeCalculationService(IHolidayCalculationService holidayCalculationService)
 {
-    public int CalculateTotalTollFeeForDay(VehicleBase vehicleBase, DateTime[] dates)
+    public int CalculateTotalTollFeeForDay(VehicleBase vehicle, DateTime[] dates)
     {
         var intervalStart = dates[0];
         var totalFee = 0;
         foreach (var date in dates)
         {
-            var nextFee = GetTollFeeForSinglePassage(date, vehicleBase);
-            var firstPassageFee = GetTollFeeForSinglePassage(intervalStart, vehicleBase);
+            var nextFee = GetTollFeeForSinglePassage(date, vehicle);
+            var firstPassageFee = GetTollFeeForSinglePassage(intervalStart, vehicle);
 
             long diffInMillies = date.Millisecond - intervalStart.Millisecond;
             var minutes = diffInMillies/1000/60;
 
             if (minutes <= 60)
             {
-                if (totalFee > 0) totalFee -= firstPassageFee;
-                if (nextFee >= firstPassageFee) firstPassageFee = nextFee;
-                totalFee += firstPassageFee;
+                totalFee = UpdateTotalFeeForPassageWithinTheHour(totalFee, nextFee, firstPassageFee);
             }
             else
             {
@@ -31,8 +29,28 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
             }
         }
 
-        if (totalFee > 60) totalFee = 60;
+        totalFee = CheckIfFeeExceedsMaxFeeLimit(totalFee);
+        
         return totalFee;
+    }
+    
+    private static int CheckIfFeeExceedsMaxFeeLimit(int currentFee)
+    {
+        if (currentFee > 60)
+            currentFee = 60;
+
+        return currentFee;
+    }
+    
+    private static int UpdateTotalFeeForPassageWithinTheHour(int currentTotalFee, int currentPassageFee, int firstPassageFee)
+    {
+        if (currentTotalFee > 0)
+            currentTotalFee -= firstPassageFee; 
+
+        if (currentPassageFee >= firstPassageFee)
+            firstPassageFee = currentPassageFee; 
+
+        return currentTotalFee + firstPassageFee;
     }
 
     private int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicle)
