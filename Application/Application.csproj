@@ -10,4 +10,12 @@
       <ProjectReference Include="..\Core\Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="PublicHoliday" Version="2.38.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Helpers\" />
+    </ItemGroup>
+
 </Project>
