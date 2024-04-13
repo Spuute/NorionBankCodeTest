@@ -5,7 +5,7 @@ using Core.Enums;
 
 namespace Application.Services.TollFeeCalculationService;
 
-public class TollFeeCalculationService(IHolidayCalculationService holidayCalculationService)
+public class TollFeeCalculationService(IHolidayCalculationService holidayCalculationService) : ITollFeeCalculationService
 {
     public int CalculateTotalTollFeeForDay(VehicleBase vehicle, DateTime[] dates)
     {
