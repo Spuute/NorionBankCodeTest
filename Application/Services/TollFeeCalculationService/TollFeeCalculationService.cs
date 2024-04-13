@@ -14,16 +14,16 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
         foreach (var date in dates)
         {
             var nextFee = GetTollFeeForSinglePassage(date, vehicleBase);
-            var tempFee = GetTollFeeForSinglePassage(intervalStart, vehicleBase);
+            var firstPassageFee = GetTollFeeForSinglePassage(intervalStart, vehicleBase);
 
             long diffInMillies = date.Millisecond - intervalStart.Millisecond;
             var minutes = diffInMillies/1000/60;
 
             if (minutes <= 60)
             {
-                if (totalFee > 0) totalFee -= tempFee;
-                if (nextFee >= tempFee) tempFee = nextFee;
-                totalFee += tempFee;
+                if (totalFee > 0) totalFee -= firstPassageFee;
+                if (nextFee >= firstPassageFee) firstPassageFee = nextFee;
+                totalFee += firstPassageFee;
             }
             else
             {
