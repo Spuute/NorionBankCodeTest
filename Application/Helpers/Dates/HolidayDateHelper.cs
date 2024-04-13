@@ -1,4 +1,4 @@
-namespace Application.Services.Dates;
+namespace Application.Helpers.Dates;
 
 public static class HolidayDateHelper
 {
