@@ -1,21 +1,12 @@
-using Application.Helpers;
+using Application.Interfaces;
 using Core.DomainObjects;
 using Core.Entities;
 using Core.Enums;
 
 namespace Application.Services.TollFeeCalculationService;
 
-public class TollFeeCalculationService
+public class TollFeeCalculationService(IHolidayCalculationService holidayCalculationService)
 {
-    private readonly TollFreeChecker _tollFreeChecker = new();
-
-    /**
-     * Calculate the total toll fee for one day
-     *
-     * @param vehicle - the vehicle
-     * @param dates   - date and time of all passes on one day
-     * @return - the total toll fee for that day
-     */
     public int CalculateTotalTollFeeForDay(VehicleBase vehicleBase, DateTime[] dates)
     {
         var intervalStart = dates[0];
@@ -44,11 +35,18 @@ public class TollFeeCalculationService
         return totalFee;
     }
 
-    private int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicleBase)
+    private int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicle)
     {
-        if (_tollFreeChecker.IsTollFreeDate(date) || IsTollFreeVehicle(vehicleBase)) return 0;
+        if (IsTollFreeVehicle(vehicle))
+            return 0;
+
+        if (holidayCalculationService.IsWeekend(date))
+            return 0;
         
-        return _tollFeeTable.OrderByDescending(x => x.Price).FirstOrDefault(x => x.TimeIsWithinBounds(date.TimeOfDay))?.Price ?? 0;
+        if (holidayCalculationService.IsTollFreeDate(date))
+            return 0;
+        
+        return _tollFeeTable.FirstOrDefault(x => x.TimeIsWithinBounds(date.TimeOfDay))?.Price ?? 0;
     }
     
     private static bool IsTollFreeVehicle(VehicleBase vehicleBase)
