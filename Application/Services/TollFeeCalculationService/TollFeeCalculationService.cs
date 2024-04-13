@@ -1,12 +1,13 @@
 using Application.Helpers;
+using Core.DomainObjects;
 using Core.Entities;
-using Core.Enums;
 
-namespace Application;
+namespace Application.Services.TollFeeCalculationService;
 
-public class TollCalculator
+public class TollFeeCalculationService
 {
     private readonly TollFreeChecker _tollFreeChecker = new();
+
     /**
      * Calculate the total toll fee for one day
      *
@@ -14,15 +15,14 @@ public class TollCalculator
      * @param dates   - date and time of all passes on one day
      * @return - the total toll fee for that day
      */
-
-    public int GetTollFee(VehicleBase vehicleBase, DateTime[] dates)
+    public int CalculateTotalTollFeeForDay(VehicleBase vehicleBase, DateTime[] dates)
     {
         var intervalStart = dates[0];
         var totalFee = 0;
         foreach (var date in dates)
         {
-            var nextFee = GetTollFee(date, vehicleBase);
-            var tempFee = GetTollFee(intervalStart, vehicleBase);
+            var nextFee = GetTollFeeForSinglePassage(date, vehicleBase);
+            var tempFee = GetTollFeeForSinglePassage(intervalStart, vehicleBase);
 
             long diffInMillies = date.Millisecond - intervalStart.Millisecond;
             var minutes = diffInMillies/1000/60;
@@ -38,11 +38,12 @@ public class TollCalculator
                 totalFee += nextFee;
             }
         }
+
         if (totalFee > 60) totalFee = 60;
         return totalFee;
     }
 
-    public int GetTollFee(DateTime date, VehicleBase vehicleBase)
+    public int GetTollFeeForSinglePassage(DateTime date, VehicleBase vehicleBase)
     {
         if (_tollFreeChecker.IsTollFreeDate(date) || _tollFreeChecker.IsTollFreeVehicle(vehicleBase)) return 0;
 
