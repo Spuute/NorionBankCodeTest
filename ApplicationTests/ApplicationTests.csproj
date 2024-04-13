@@ -18,7 +18,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="HolidayCalculationServiceTests\" />
+      <Folder Include="Services\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Application\Application.csproj" />
     </ItemGroup>
 
 </Project>
