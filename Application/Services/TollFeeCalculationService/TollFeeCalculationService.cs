@@ -1,4 +1,5 @@
 using Application.Interfaces;
+using Core.Bases;
 using Core.DomainObjects;
 using Core.Entities;
 using Core.Enums;

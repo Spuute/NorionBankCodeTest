@@ -1,3 +1,4 @@
+using Core.Bases;
 using Core.Entities;
 
 namespace Application.Interfaces;
