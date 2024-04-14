@@ -21,7 +21,7 @@ public class HolidayCalculationService : IHolidayCalculationService
             tollFreeDates.Add(day);
 
             var previousDay = HolidayDateHelper.GetPreviousWorkDay(day);
-            if (HolidayDateHelper.IsChargeableDayBeforeHolidays(previousDay))
+            if (!HolidayDateHelper.IsChargeableDayBeforeHolidays(previousDay))
                 tollFreeDates.Add(HolidayDateHelper.GetPreviousWorkDay(day));
         }
 
