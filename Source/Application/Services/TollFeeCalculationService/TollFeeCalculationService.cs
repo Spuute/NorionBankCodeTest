@@ -45,13 +45,6 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
     
     private static int UpdateTotalFeeForPassageWithinTheHour(int firstPassageFee, int currentPassageFee)
     {
-        // if (currentTotalFee > 0)
-        //     currentTotalFee -= firstPassageFee; 
-        //
-        // if (currentPassageFee >= firstPassageFee)
-        //     firstPassageFee = currentPassageFee; 
-        //
-        // return currentTotalFee + firstPassageFee;
         return currentPassageFee > firstPassageFee ? currentPassageFee : firstPassageFee;
     }
 
