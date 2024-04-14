@@ -208,4 +208,52 @@ public class HolidayDateHelperTests
         // Assert
         Assert.IsFalse(result);
     }
+
+    [TestMethod]
+    public void IsJuly_True_ShouldReturnTrue()
+    {
+        // Arrange
+        var date = new DateTime(2027, 07, 04);
+        
+        // Act
+        var result = HolidayDateHelper.IsJuly(date);
+        
+        // Assert
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
+    [DynamicData(nameof(EveryMonthExceptJuly))]
+    public void IsJuly_False_ShouldReturnFalse(int month)
+    {
+        // Arrange
+        var date = new DateTime(2026, month, 04);
+        
+        // Act
+        var result = HolidayDateHelper.IsJuly(date);
+
+        // Assert
+        Assert.IsFalse(result);
+    }
+
+    public static IEnumerable<object[]> EveryMonthExceptJuly
+    {
+        get
+        {
+            return new[]
+            {
+                [01],
+                [02],
+                [03],
+                [04],
+                [05],
+                [06],
+                [08],
+                [09],
+                [10],
+                [11],
+                new object[] { 12 }
+            };
+        }
+    }
 }
