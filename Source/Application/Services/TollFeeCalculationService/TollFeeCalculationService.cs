@@ -9,14 +9,14 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
 {
     public int CalculateTotalTollFeeForDay(VehicleBase vehicle, DateTime[] dates)
     {
-        var intervalStart = dates[0];
+        var firstPassage = dates[0];
         var totalFee = 0;
-        foreach (var date in dates)
+        foreach (var currentPassage in dates)
         {
-            var nextFee = GetTollFeeForSinglePassage(date, vehicle);
-            var firstPassageFee = GetTollFeeForSinglePassage(intervalStart, vehicle);
+            var nextFee = GetTollFeeForSinglePassage(currentPassage, vehicle);
+            var firstPassageFee = GetTollFeeForSinglePassage(firstPassage, vehicle);
 
-            long diffInMillies = date.Millisecond - intervalStart.Millisecond;
+            long diffInMillies = currentPassage.Millisecond - firstPassage.Millisecond;
             var minutes = diffInMillies/1000/60;
 
             if (minutes <= 60)
