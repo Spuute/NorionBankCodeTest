@@ -30,6 +30,6 @@ public class HolidayCalculationService : IHolidayCalculationService
                 tollFreeDates.Add(HolidayDateHelper.GetPreviousWorkDay(day));
         }
 
-        return tollFreeDates.Contains(date);
+        return tollFreeDates.Contains(date.Date);
     }
 }
