@@ -15,9 +15,8 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
         {
             var nextFee = GetTollFeeForSinglePassage(currentPassage, vehicle);
             var firstPassageFee = GetTollFeeForSinglePassage(firstPassage, vehicle);
-
-            long diffInMillies = currentPassage.Millisecond - firstPassage.Millisecond;
-            var minutes = diffInMillies/1000/60;
+            
+            var minutes = GetTimeDifferenceInMinutes(firstPassage, currentPassage);
 
             if (minutes <= 60)
             {
@@ -32,6 +31,12 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
         totalFee = CheckIfFeeExceedsMaxFeeLimit(totalFee);
         
         return totalFee;
+    }
+    
+    private static double GetTimeDifferenceInMinutes(DateTime firstPassage, DateTime currentPassage)
+    {
+        var timeDiffInMinutes = currentPassage - firstPassage;
+        return timeDiffInMinutes.TotalMinutes;
     }
     
     private static int CheckIfFeeExceedsMaxFeeLimit(int currentFee)
