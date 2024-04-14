@@ -10,8 +10,7 @@ public class TollCalculationServiceTests
 {
     private readonly Mock<IHolidayCalculationService> _holidayCalculationServiceMock = new();
     private TollFeeCalculationService _tollFeeCalculationService;
-
-
+    
     [TestInitialize]
     public void InitializeTests()
     {
@@ -42,7 +41,7 @@ public class TollCalculationServiceTests
     }
 
     [TestMethod]
-    public void CalculateTotalTollFeeForDay_ShouldReturnZero_VehicleIsTollFree()
+    public void CalculateTotalTollFeeForDay_VehicleIsTollFree_ShouldReturnZero()
     {
         // Arrange
         var vehicle = new Motorbike();
@@ -83,7 +82,7 @@ public class TollCalculationServiceTests
     }
 
     [TestMethod]
-    public void CalculateTotalTollFeeForDay_ShouldReturnSingleTollFee_ForSinglePassage()
+    public void CalculateTotalTollFeeForDay_SinglePassage_ShouldReturnCorrectAndSingleTollFee()
     {
         // Arrange
         var vehicle = new Car();
@@ -101,7 +100,7 @@ public class TollCalculationServiceTests
     }
 
     [TestMethod]
-    public void CalculateTotalTollFeeForDay_ShouldReturnSingleFeeAtHighestAmount_ForMultiplePassagesWithinWindow()
+    public void CalculateTotalTollFeeForDay_MultiplePassageWithinTheHour_ShouldReturnSingleFeeAtHighestAmount()
     {
         // Arrange
         var vehicle = new Car();
