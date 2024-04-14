@@ -119,6 +119,19 @@ public class HolidayCalculationServiceTests
     }
 
     [TestMethod]
+    public void IsTollFreeDate_ChristmasWithTime_ShouldReturnTrue()
+    {
+        // Arrange
+        var christmas = new DateTime(2024, 12, 24, 10, 03, 33);
+        
+        // Act
+        var result = _holidayCalculationService.IsTollFreeDate(christmas);
+
+        // Assert
+        Assert.IsTrue(result);
+    }
+
+    [TestMethod]
     [DynamicData(nameof(SpecificNoneTollFreeDatesBeforeHolidays))]
     public void IsTollFreeDate_SpecificDaysBeforeHolidays_ShouldReturnFalse(int year, int month, int day)
     {
