@@ -52,6 +52,9 @@ public class TollFeeCalculationService(IHolidayCalculationService holidayCalcula
     {
         if (IsTollFreeVehicle(vehicle))
             return 0;
+        
+        if (holidayCalculationService.IsJuly(date))
+            return 0;
 
         if (holidayCalculationService.IsWeekend(date))
             return 0;
