@@ -10,6 +10,11 @@ public class HolidayCalculationService : IHolidayCalculationService
     {
         return HolidayDateHelper.IsWeekend(date);
     }
+
+    public bool IsJuly(DateTime date)
+    {
+        return HolidayDateHelper.IsJuly(date);
+    }
     
     public bool IsTollFreeDate(DateTime date)
     {

@@ -35,4 +35,9 @@ public static class HolidayDateHelper
                currentDay.Date == dayBeforeChristmas ||
                currentDay.Date == dayBeforeNewYears;
     }
+
+    public static bool IsJuly(DateTime currentDay)
+    {
+        return currentDay.Month == 07;
+    }
 }
