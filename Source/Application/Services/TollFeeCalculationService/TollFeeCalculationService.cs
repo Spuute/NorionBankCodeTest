@@ -7,12 +7,12 @@ namespace Application.Services.TollFeeCalculationService;
 
 public class TollFeeCalculationService(IHolidayCalculationService holidayCalculationService) : ITollFeeCalculationService
 {
-    public int CalculateTotalTollFeeForDay(VehicleBase vehicle, DateTime[] dates)
+    public int CalculateTotalTollFeeForDay(VehicleBase vehicle, DateTime[] passages)
     {
         const int dailyMaxFee = 60;
-        var firstPassage = dates[0];
+        var firstPassage = passages[0];
         var totalFee = 0;
-        foreach (var currentPassage in dates)
+        foreach (var currentPassage in passages)
         {
             var currentPassageFee = GetTollFeeForSinglePassage(currentPassage, vehicle);
             var firstPassageFee = GetTollFeeForSinglePassage(firstPassage, vehicle);
